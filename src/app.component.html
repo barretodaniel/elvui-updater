@@ -1,0 +1,26 @@
+<table class="mdl-data-table mdl-js-data-table" style="width: 100%">
+  <thead>
+    <tr>
+      <th class="mdl-data-table__cell--non-numeric">Package</th>
+      <th>Current Version</th>
+      <th>Latest Version</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="mdl-data-table__cell--non-numeric">ElvUI</td>
+      <td>{{current}}</td>
+      <td>{{latest}}</td>
+    </tr>
+  </tbody>
+</table>
+<footer class="mdl-mini-footer">
+  <div class="mdl-mini-footer__left-section">
+   <div class="mdl-logo">{{footerMessage}}</div>
+  </div>
+  <div class="mdl-mini-footer__right-section">
+    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" (click)="update()" [disabled]="versionEqual">
+      Update
+    </button>
+  </div>
+</footer>
