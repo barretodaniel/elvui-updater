@@ -45,6 +45,7 @@ function getPackage(event) {
   ipcEvent = event;
   const darwinPath = '/Applications/World of Warcraft/Interface/AddOns/';
   const win32Path = 'C:\\Program\ Files\ (x86)\\World\ of\ Warcraft\\Interface\\AddOns\\';
+  process.stdout.write('Downloading...\n');
   download('http://git.tukui.org/Elv/elvui/repository/archive.zip?reg=master', './', { extract: true }).then(() => {
     process.stdout.write('Download succeeded...\n');
 

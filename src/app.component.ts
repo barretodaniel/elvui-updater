@@ -32,8 +32,8 @@ export class AppComponent implements OnInit, OnDestroy {
     });
 
     ipcRenderer.on('update-done', (event) => {
-      this._versionService.getCurrentVersion();
       ipcRenderer.send('set-latest-version', this.latest);
+      this._versionService.getCurrentVersion();
     });
     this.getVersions();
   }

@@ -29,8 +29,8 @@ var AppComponent = (function () {
             });
         });
         electron_1.ipcRenderer.on('update-done', function (event) {
-            _this._versionService.getCurrentVersion();
             electron_1.ipcRenderer.send('set-latest-version', _this.latest);
+            _this._versionService.getCurrentVersion();
         });
         this.getVersions();
     };

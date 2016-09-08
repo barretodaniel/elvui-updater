@@ -55,11 +55,12 @@ app.on('activate', () => {
 ipcMain.on('version', (event) => {
   storage.get('version.json', (err, data) => {
     if (err) throw err;
-    if (typeof data.version === 'number') {
+    if (data.version && typeof data.version === 'number') {
       event.sender.send('version-reply', data.version);
     } else {
       storage.set('version', { version: 0 }, (error) => {
         if (error) throw error;
+        event.sender.send('version-reply', 0);
       });
     }
   });
