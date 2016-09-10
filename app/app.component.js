@@ -8,55 +8,61 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var core_1 = require('@angular/core');
-var electron_1 = require('electron');
-var version_service_1 = require('./version.service');
-var AppComponent = (function () {
-    function AppComponent(_versionService, _ngZone) {
+const core_1 = require('@angular/core');
+const electron_1 = require('electron');
+const version_service_1 = require('./version.service');
+let AppComponent = class AppComponent {
+    constructor(_versionService, _ngZone) {
         this._versionService = _versionService;
         this._ngZone = _ngZone;
         this.versionEqual = true;
     }
-    AppComponent.prototype.ngOnInit = function () {
-        var _this = this;
-        electron_1.ipcRenderer.on('version-reply', function (event, version) {
-            _this._ngZone.run(function () {
-                _this.current = version;
-                _this.versionEqual = _this.latest === _this.current;
-                _this.footerMessage = _this.versionEqual
-                    ? 'Package is up to date'
-                    : 'An update is available';
+    ngOnInit() {
+        electron_1.ipcRenderer.on('version-reply', (event, version) => {
+            this._ngZone.run(() => {
+                this.current = version;
+                this.compareVersions();
             });
         });
-        electron_1.ipcRenderer.on('update-done', function (event) {
-            electron_1.ipcRenderer.send('set-latest-version', _this.latest);
-            _this._versionService.getCurrentVersion();
+        electron_1.ipcRenderer.on('update-done', (event) => {
+            electron_1.ipcRenderer.send('set-latest-version', this.latest);
+            this._versionService.getCurrentVersion();
         });
         this.getVersions();
-    };
-    AppComponent.prototype.ngOnDestroy = function () {
+    }
+    ngOnDestroy() {
         electron_1.ipcRenderer.removeAllListeners();
-    };
-    AppComponent.prototype.getVersions = function () {
-        var _this = this;
-        this._versionService.getLatestVersion().then(function (version) {
-            _this.latest = version;
-            _this._versionService.getCurrentVersion();
+    }
+    compareVersions() {
+        this.versionEqual = this.latest === this.current;
+        this.footerMessage = this.versionEqual
+            ? 'Package is up to date'
+            : 'An update is available';
+    }
+    getLatestVersion() {
+        this.footerMessage = 'Checking for updates';
+        return this._versionService.getLatestVersion().then(version => {
+            this.latest = version;
+            this.compareVersions();
         });
-    };
-    AppComponent.prototype.update = function () {
+    }
+    getVersions() {
+        this.getLatestVersion().then(() => {
+            this._versionService.getCurrentVersion();
+        });
+    }
+    update() {
         electron_1.ipcRenderer.send('update');
-    };
-    AppComponent = __decorate([
-        core_1.Component({
-            // moduleId: module.id,
-            selector: 'app',
-            templateUrl: 'src/app.component.html',
-            providers: [version_service_1.VersionService]
-        }), 
-        __metadata('design:paramtypes', [version_service_1.VersionService, core_1.NgZone])
-    ], AppComponent);
-    return AppComponent;
-}());
+    }
+};
+AppComponent = __decorate([
+    core_1.Component({
+        // moduleId: module.id,
+        selector: 'app',
+        templateUrl: 'src/app.component.html',
+        providers: [version_service_1.VersionService]
+    }), 
+    __metadata('design:paramtypes', [version_service_1.VersionService, core_1.NgZone])
+], AppComponent);
 exports.AppComponent = AppComponent;
 //# sourceMappingURL=app.component.js.map

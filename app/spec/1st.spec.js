@@ -1,8 +1,8 @@
-describe('1st tests', function () {
-    it('true is true', function () {
+describe('1st tests', () => {
+    it('true is true', () => {
         expect(true).toEqual(true);
     });
-    it('null is not the same thing as undefined', function () {
+    it('null is not the same thing as undefined', () => {
         expect(null).not.toEqual(undefined);
     });
 });

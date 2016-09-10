@@ -24,10 +24,7 @@ export class AppComponent implements OnInit, OnDestroy {
     ipcRenderer.on('version-reply', (event, version: number) => {
       this._ngZone.run(() => {
         this.current = version;
-        this.versionEqual = this.latest === this.current;
-        this.footerMessage = this.versionEqual
-          ? 'Package is up to date'
-          : 'An update is available';
+        this.compareVersions();
       });
     });
 
@@ -42,9 +39,23 @@ export class AppComponent implements OnInit, OnDestroy {
     ipcRenderer.removeAllListeners();
   }
 
-  getVersions() {
-    this._versionService.getLatestVersion().then(version => {
+  compareVersions() {
+    this.versionEqual = this.latest === this.current;
+    this.footerMessage = this.versionEqual
+      ? 'Package is up to date'
+      : 'An update is available';
+  }
+
+  getLatestVersion(): Promise<void> {
+    this.footerMessage = 'Checking for updates';
+    return this._versionService.getLatestVersion().then(version => {
       this.latest = version;
+      this.compareVersions();
+    });
+  }
+
+  getVersions() {
+    this.getLatestVersion().then(() => {
       this._versionService.getCurrentVersion();
     });
   }

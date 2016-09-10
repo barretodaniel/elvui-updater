@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es6",
     "module": "commonjs",
     "moduleResolution": "node",
     "sourceMap": true,
@@ -11,6 +11,7 @@
     "outDir": "app"
   },
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "ElvUI Updater-darwin-x64"
   ]
 }

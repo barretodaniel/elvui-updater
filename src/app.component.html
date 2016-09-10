@@ -19,6 +19,9 @@
    <div class="mdl-logo">{{footerMessage}}</div>
   </div>
   <div class="mdl-mini-footer__right-section">
+    <button id="refresh" class="mdl-button mdl-js-button mdl-button--icon" (click)="getLatestVersion()">
+      <i  class="material-icons">refresh</i>
+    </button>
     <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" (click)="update()" [disabled]="versionEqual">
       Update
     </button>
