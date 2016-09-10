@@ -19,7 +19,7 @@ function createWindow() {
   win.loadURL(`file://${__dirname}/index.html`);
 
   // Open dev tools
-  win.webContents.openDevTools();
+  // win.webContents.openDevTools();
 
   // Emmited when the window is closed
   win.on('closed', () => {
