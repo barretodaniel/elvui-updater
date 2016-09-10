@@ -5,3 +5,17 @@
 .mdl-logo {
   margin-bottom: 0;
 }
+
+.mdl-data-table {
+  width: 100%;
+}
+
+body {
+  height: 100vh; 
+  min-height: 164px;
+}
+
+.main {
+  height: calc(100vh - 68px); 
+  min-height: 96px;
+}

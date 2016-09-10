@@ -10,13 +10,14 @@ function createWindow() {
     width: 800,
     height: 200,
     useContentSize: true,
+    minHeight: 164,
   });
 
   // Load the index.html of the app
   win.loadURL(`file://${__dirname}/index.html`);
 
   // Open dev tools
-  win.webContents.openDevTools();
+  // win.webContents.openDevTools();
 
   // Emmited when the window is closed
   win.on('closed', () => {
