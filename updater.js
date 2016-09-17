@@ -4,24 +4,22 @@ const mv = require('mv');
 const os = require('os');
 const rimraf = require('rimraf');
 
-const src = './elvui.git';
 let ipcEvent;
 
 function moveConfig(path) {
-  process.stdout.write('Moving config folder...\n');
+  ipcEvent.sender.send('update-message', 'Moving config folder...');
   const configDest = `${path}ElvUI_Config`;
   rimraf(configDest, { disableGlob: true }, (rmErr) => {
     if (rmErr) throw rmErr;
-    mv(`${src}/ElvUI_Config`, configDest, { clobber: true }, (err) => {
+    mv('./elvui.git/ElvUI_Config', configDest, { clobber: true }, (err) => {
       if (err) throw err;
-      process.stdout.write('ElvUI successfully updated!\n');
+      ipcEvent.sender.send('update-message', 'ElvUI successfully updated!');
       try {
-        process.stdout.write('Cleaning up...\n');
-        const files = fs.readdirSync(src);
+        ipcEvent.sender.send('update-message', 'Cleaning up...');
+        const files = fs.readdirSync('./elvui.git');
         if (files !== null && files.length === 0) {
-          fs.rmdirSync(src);
+          fs.rmdirSync('./elvui.git');
         }
-        process.stdout.write('Done!');
         ipcEvent.sender.send('update-done');
       } catch (error) {
         throw error;
@@ -31,10 +29,11 @@ function moveConfig(path) {
 }
 
 function moveMain(path) {
+  ipcEvent.sender.send('update-message', 'Moving main folder...');
   const mainDest = `${path}ElvUI`;
   rimraf(mainDest, { disableGlob: true }, (rmErr) => {
     if (rmErr) throw rmErr;
-    mv(`${src}/ElvUI`, mainDest, { clobber: true }, (err) => {
+    mv('./elvui.git/ElvUI', mainDest, { clobber: true }, (err) => {
       if (err) throw err;
       moveConfig(path);
     });
@@ -44,13 +43,13 @@ function moveMain(path) {
 function getPackage(event) {
   ipcEvent = event;
   const darwinPath = '/Applications/World of Warcraft/Interface/AddOns/';
-  const win32Path = 'C:\\Program\ Files\ (x86)\\World\ of\ Warcraft\\Interface\\AddOns\\';
-  process.stdout.write('Downloading...\n');
-  download('http://git.tukui.org/Elv/elvui/repository/archive.zip?reg=master', './', { extract: true }).then(() => {
-    process.stdout.write('Download succeeded...\n');
+  const win32Path = 'C:\\Program Files (x86)\\World of Warcraft\\Interface\\AddOns\\';
 
+  ipcEvent.sender.send('update-message', 'Downloading...');
+
+  download('http://git.tukui.org/Elv/elvui/repository/archive.zip?reg=master', './', { extract: true }).then(() => {
+    ipcEvent.sender.send('update-message', 'Download succeeded...');
     if (os.platform() === 'darwin') {
-      process.stdout.write('Moving main folder...\n');
       moveMain(darwinPath);
     } else if (os.platform() === 'win32') {
       moveMain(win32Path);

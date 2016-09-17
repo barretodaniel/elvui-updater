@@ -28,6 +28,9 @@ let AppComponent = class AppComponent {
             electron_1.ipcRenderer.send('set-latest-version', this.latest);
             this._versionService.getCurrentVersion();
         });
+        electron_1.ipcRenderer.on('update-message', (event, message) => {
+            this.footerMessage = message;
+        });
         this.getVersions();
     }
     ngOnDestroy() {

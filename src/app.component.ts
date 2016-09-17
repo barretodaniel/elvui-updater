@@ -32,6 +32,12 @@ export class AppComponent implements OnInit, OnDestroy {
       ipcRenderer.send('set-latest-version', this.latest);
       this._versionService.getCurrentVersion();
     });
+
+    ipcRenderer.on('update-message', (event, message: string) => {
+      this._ngZone.run(() => {
+        this.footerMessage = message;
+      });
+    });
     this.getVersions();
   }
 
@@ -39,7 +45,7 @@ export class AppComponent implements OnInit, OnDestroy {
     ipcRenderer.removeAllListeners();
   }
 
-  compareVersions() {
+  private compareVersions() {
     this.versionEqual = this.latest === this.current;
     this.footerMessage = this.versionEqual
       ? 'Package is up to date'
@@ -54,7 +60,7 @@ export class AppComponent implements OnInit, OnDestroy {
     });
   }
 
-  getVersions() {
+  private getVersions() {
     this.getLatestVersion().then(() => {
       this._versionService.getCurrentVersion();
     });
