@@ -32,12 +32,6 @@ export class AppComponent implements OnInit, OnDestroy {
       ipcRenderer.send('set-latest-version', this.latest);
       this._versionService.getCurrentVersion();
     });
-
-    ipcRenderer.on('update-message', (event, message: string) => {
-      this._ngZone.run(() => {
-        this.footerMessage = message;
-      });
-    });
     this.getVersions();
   }
 
@@ -67,6 +61,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   update() {
+    this.footerMessage = 'Updating...';
     ipcRenderer.send('update');
   }
 }
