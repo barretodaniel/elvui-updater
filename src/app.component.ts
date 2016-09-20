@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy, NgZone } from '@angular/core';
+import { DOCUMENT } from '@angular/platform-browser';
 import { Observable } from 'rxjs';
 import { ipcRenderer } from 'electron';
 
@@ -31,6 +32,11 @@ export class AppComponent implements OnInit, OnDestroy {
     ipcRenderer.on('update-done', (event) => {
       ipcRenderer.send('set-latest-version', this.latest);
       this._versionService.getCurrentVersion();
+    });
+
+    ipcRenderer.on('error', (event, message: string) => {
+      const toast = document.getElementById('error-toast');
+      toast.MaterialSnackbar.showSnackbar({ message });
     });
     this.getVersions();
   }

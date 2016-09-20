@@ -9,9 +9,9 @@ let ipcEvent;
 function moveConfig(path) {
   const configDest = `${path}ElvUI_Config`;
   rimraf(configDest, { disableGlob: true }, (rmErr) => {
-    if (rmErr) throw rmErr;
+    if (rmErr) ipcEvent.sender.send('error', rmErr.message);
     mv('./elvui.git/ElvUI_Config', configDest, { clobber: true }, (err) => {
-      if (err) throw err;
+      if (err) if (err) ipcEvent.sender.send('error', err.message);
       try {
         const files = fs.readdirSync('./elvui.git');
         if (files !== null && files.length === 0) {
@@ -28,9 +28,9 @@ function moveConfig(path) {
 function moveMain(path) {
   const mainDest = `${path}ElvUI`;
   rimraf(mainDest, { disableGlob: true }, (rmErr) => {
-    if (rmErr) throw rmErr;
+    if (rmErr) ipcEvent.sender.send('error', rmErr.message);
     mv('./elvui.git/ElvUI', mainDest, { clobber: true }, (err) => {
-      if (err) throw err;
+      if (err) ipcEvent.sender.send('error', err.message);
       moveConfig(path);
     });
   });
